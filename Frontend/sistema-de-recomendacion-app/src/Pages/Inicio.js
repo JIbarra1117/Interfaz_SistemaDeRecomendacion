@@ -11,11 +11,11 @@ const Inicio = () => {
     const [marcaSeleccionada, setMarcaSeleccionada] = useState('');
     const [links_images] = useState([
         { marca: "Vans", links: "", num: 0 },
-        { marca: "Reebok", links: (<SiReebok className="w-6 h-6" />), num: 0 },
-        { marca: "Adidas", links: (<SiAdidas className="w-6 h-6" />), num: 0 },
-        { marca: "Nike", links: (<SiNike className="w-6 h-6" />), num: 0 },
-        { marca: "Puma", links: (<SiPuma className="w-6 h-6" />), num: 0 },
-        { marca: "Under Armour", links: (<SiUnderarmour className="w-6 h-6" />), num: 0 },
+        { marca: "Reebok", links: (<SiReebok className="w-auto h-auto" />), num: 0 },
+        { marca: "Adidas", links: (<SiAdidas className="w-auto h-auto" />), num: 0 },
+        { marca: "Nike", links: (<SiNike className="w-auto h-auto" />), num: 0 },
+        { marca: "Puma", links: (<SiPuma className="w-auto h-auto" />), num: 0 },
+        { marca: "Under Armour", links: (<SiUnderarmour className="w-auto h-auto" />), num: 0 },
         { marca: "Converse", links: "", num: 0 }]);
 
     useEffect(() => {
@@ -45,11 +45,19 @@ const Inicio = () => {
             <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
                 <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                     <a className="flex items-center ps-2.5 mb-5">
-                        <PiSneakerMoveLight className="w-20 h-20" />
+                        <PiSneakerMoveLight className="w-20 h-20 text-black dark:text-white" />
                         {/* <img src="" className="w-20 h-20" alt="SHOEMMENDER Logo" /> */}
                         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">SHOEMMENDER</span>
                     </a>
                     <ul className="space-y-2 font-medium">
+                        <li>
+                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span className="flex-1 ms-3 whitespace-nowrap">Sistema de recomendacion</span>
+                            </a>
+                        </li>
                         <li>
                             <details className="group [&_summary::-webkit-details-marker]:hidden">
                                 <summary className="flex cursor-pointer items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
@@ -77,7 +85,7 @@ const Inicio = () => {
                                         {marcas.map((marca) => (
                                             <div key={marca.marca}>
                                                 <button type="button"
-                                                    className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none transition hover:scale-110 hover:shadow-xl focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2"
+                                                    className="text-black-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none transition hover:scale-110 hover:shadow-xl focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2"
                                                     onClick={() => {
                                                         console.log("Valor de marca:", marca);
                                                         marca && handle_actualizarMarca(marca.marca);
@@ -92,14 +100,6 @@ const Inicio = () => {
                                 </ul>
                             </details>
                         </li>
-                        <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span className="flex-1 ms-3 whitespace-nowrap">Sistema de recomendacion</span>
-                            </a>
-                        </li>
 
                     </ul>
                 </div>
@@ -108,7 +108,7 @@ const Inicio = () => {
             <div className="p-4 sm:ml-80">
                 {/* <Dashboard marca={marcaSeleccionada}></Dashboard> */}
                 <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-                    <Contenido_Inicio marca={marcaSeleccionada} />
+                    <Contenido_Inicio marca={marcaSeleccionada} icono={obtener_img(marcaSeleccionada)} />
                 </div>
             </div>
         </>

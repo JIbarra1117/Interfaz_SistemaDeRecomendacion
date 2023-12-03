@@ -1,26 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
 import ProductCard from "./Product_Card";
 
 const ActiveSlider = ({ productos, titulo }) => {
+    const [validarRoll, setValidarScroll] = useState(true)
+    // const [productos, setProductos] = useState(productos);
 
     useEffect(() => {
         console.log(productos);
+        if (productos && productos.length < 4) {
+            setValidarScroll(false);
+        }
     }, [productos]);
-
-    const estiloBoton = 'w-10 h-10 text-black'
 
     const settings = {
         dots: true,
-        infinite: false,
-        speed: 500,
+        infinite: validarRoll,
         slidesToShow: 4,
         slidesToScroll: 4,
         initialSlide: 0,
-        // nextArrow: <CustomNextArrow />, // Usa componentes o elementos HTML para las flechas
-        // prevArrow: <CustomPrevArrow />, // Usa componentes o elementos HTML para las flechas
-        // key: JSON.stringify(productos._id),
+        cssEase: "linear",
     };
 
     return (
@@ -28,11 +28,33 @@ const ActiveSlider = ({ productos, titulo }) => {
             <div className="grid grid-cols-1 p-5 rounded overflow-hidden text-black dark:text-white">
                 <h1 className="text-2xl font-bold ">{titulo}</h1>
                 <div className="mb-2 p-2">
-                    <Slider {...settings} >
+                    {productos ? <Slider {...settings} >
                         {productos ? productos.map((item) => (
                             <ProductCard producto={item} key={item._id}></ProductCard>
-                        )) : (<a>No hay data</a>)}
-                    </Slider>
+                        )) : (
+                            <>
+                                <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                    </svg>
+                                    <span class="sr-only">Aviso</span>
+
+                                </div>
+                            </>
+                        )}
+                    </Slider> : (
+                        <div class="flex items-center p-1  text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+
+                                <span class="font-medium">NO HUBO {titulo.toUpperCase()}</span>
+                            </div>
+                        </div>
+                        // Renderizar algo cuando productos es undefined
+                    )}
                 </div>
             </div>
         </div>
