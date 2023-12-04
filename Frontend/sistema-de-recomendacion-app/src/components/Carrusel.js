@@ -24,40 +24,50 @@ const ActiveSlider = ({ productos, titulo }) => {
     };
 
     return (
-        <div className="max-w mx-auto">
-            <div className="grid grid-cols-1 p-5 rounded overflow-hidden text-black dark:text-white">
-                <h1 className="text-2xl font-bold ">{titulo}</h1>
+        <div className="max-w mx-auto ">
+            <div className="grid grid-cols-1 p-5 rounded overflow-hidden text-black dark:text-white ">
+                <div className="p-6">
+                    <h1 className="flex items-center text-5xl font-extrabold dark:text-white">
+                        {titulo}
+                        {productos ? (
+                            <span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+                                {productos.length}
+                            </span>
+                        ) : ''}
+
+                    </h1>
+                </div>
                 <div className="mb-2 p-2">
-                    {productos ? <Slider {...settings} >
-                        {productos ? productos.map((item) => (
-                            <ProductCard producto={item} key={item._id}></ProductCard>
-                        )) : (
-                            <>
-                                <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
-                                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                    </svg>
-                                    <span class="sr-only">Aviso</span>
-
+                    {productos ?
+                        <Slider {...settings}>
+                            {productos ? productos.map((item) => (
+                                <ProductCard producto={item} key={item._id}></ProductCard>
+                            )) : (
+                                <>
+                                    <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                        </svg>
+                                        <span class="sr-only">Aviso</span>
+                                    </div>
+                                </>
+                            )}
+                        </Slider> : (
+                            <div class="flex  items-center p-1  text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                    <span class="font-medium">NO HUBO {titulo.toUpperCase()}</span>
                                 </div>
-                            </>
-                        )}
-                    </Slider> : (
-                        <div class="flex items-center p-1  text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div>
-
-                                <span class="font-medium">NO HUBO {titulo.toUpperCase()}</span>
                             </div>
-                        </div>
-                        // Renderizar algo cuando productos es undefined
-                    )}
+                            // Renderizar algo cuando productos es undefined
+                        )}
                 </div>
             </div>
         </div>
+
     );
 };
 

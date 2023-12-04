@@ -11,13 +11,12 @@ const ProductCard = ({ producto }) => {
   }
 
   return (
-    <div className="rounded-lg shadow lg:w-80 lg:h-auto" key={producto._id}>
-      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="rounded-lg shadow lg:w-80 lg:h-auto h-[300px]" key={producto._id}>
+      <div className="w-full max-w-sm bg-white bg-opacity-0 border border-gray-200 rounded-lg shadow dark:bg-white-800 dark:border-gray-700">
         <a key={producto._id}>
-          <img className="scale-115 p-8 rounded-t-lg" src={producto.imagenes[0]} alt="product image" />
+          <img className="scale-125 p-8 rounded-t-lg" src={producto.imagenes[0]} alt="product image" />
         </a>
-        <div className="px-5 pb-5">
-
+        <div className="px-5 pb-5 pt-6">
           <a >
             <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{producto.modelo}</h5>
           </a>
@@ -48,7 +47,7 @@ const ProductCard = ({ producto }) => {
           </div>
           <div className="flex items-center justify-between" >
             <span className="text-3xl font-bold text-gray-900 dark:text-white">${producto.precio}</span>
-            <a href={producto.url_calzado} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <a href={producto.url_calzado} className="text-white bg-black-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-black dark:hover:bg-gray-700 dark:focus:ring-blue-800">
               Ir al sitio
             </a>
           </div>
