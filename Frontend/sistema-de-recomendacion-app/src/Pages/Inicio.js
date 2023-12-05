@@ -10,7 +10,7 @@ import ParticlesBackground from '../components/config/ParticlesBackground';
 const Inicio = () => {
 
     const [marcas, setMarcas] = useState([]);
-    const [marcaSeleccionada, setMarcaSeleccionada] = useState('');
+    const [marcaSeleccionada, setMarcaSeleccionada] = useState('Nike');
     const [links_images] = useState([
         { marca: "Vans", links: "", num: 0 },
         { marca: "Reebok", links: (<SiReebok className="w-auto h-auto" />), num: 0 },
@@ -21,7 +21,7 @@ const Inicio = () => {
         { marca: "Converse", links: (<MdStars className="w-auto h-auto" />), num: 0 }]);
 
     useEffect(() => {
-        axios.get('http://localhost:3030/calzado_deportivo/numero_calzados_por_marca')
+        axios.get('http://localhost:3031/calzado_deportivo/numero_calzados_por_marca')
             .then(response => {
                 const data = response.data;
                 if (Array.isArray(data)) {

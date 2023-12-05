@@ -273,4 +273,39 @@ router.get('/productos_nuevos_por_marca', async (req, res) => {
     }
 });
 
+// Ruta para verificar si hay productos en una fecha
+router.get('/productos_en_fecha', async (req, res) => {
+    try {
+        const { fecha } = req.query;
+
+        if (!fecha) {
+            return res.status(400).json({ error: 'Se debe proporcionar la fecha como parámetro de consulta.' });
+        }
+
+        // Convertir la fecha de cadena a objeto Date
+        const fechaObjeto = new Date(fecha);
+
+        // Extraer el componente de fecha (sin la hora) de la fecha proporcionada
+        const fechaSinHora = new Date(fechaObjeto.getFullYear(), fechaObjeto.getMonth(), fechaObjeto.getDate());
+
+        // Buscar productos con el componente de fecha (sin la hora) igual al proporcionado
+        const resultados = await CalzadoDeportivo.find({
+            fecha: {
+                $gte: fechaSinHora,
+                $lt: new Date(fechaSinHora.getTime() + 24 * 60 * 60 * 1000), // 24 horas después
+            },
+        });
+
+        const hayProductosEnFecha = resultados.length > 0;
+
+        res.json({ hayProductosEnFecha });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+
+
 module.exports = router;

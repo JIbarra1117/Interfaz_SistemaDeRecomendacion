@@ -1,6 +1,7 @@
 const express = require('express');
 const calzadoRoutes = require('./calzadoRoutes');
 const prueba = require('./prueba');
+const procesoScrapyRouter = require('./dataProceso');
 
 const router = express.Router();
 
@@ -10,5 +11,6 @@ router.get('/', (req, res) => {
 
 router.use('/calzado_deportivo', calzadoRoutes);
 router.use('/prueba', prueba)
+router.use('/procesoScrapy', procesoScrapyRouter )
 
 module.exports = router;

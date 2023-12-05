@@ -11,6 +11,7 @@ const CalzadoDeportivo = mongoose.model('calzados', {
   calificacion: Number,
   tallas: Array,
   imagenes: Array,
+  fecha: Date,
 });
 
 module.exports = CalzadoDeportivo;

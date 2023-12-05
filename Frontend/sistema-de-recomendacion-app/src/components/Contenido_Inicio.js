@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import ActiveSlider from './Carrusel';
+import PaginacionProductos from './PaginacionProductos';
 
 const Contenido_Inicio = ({ marca, icono }) => {
     // const [marcaSeleccionada, setMarcaSeleccionada] = useState('');
@@ -11,12 +12,12 @@ const Contenido_Inicio = ({ marca, icono }) => {
     useEffect(() => {
         if (marca) {
             axios
-                .get(`http://localhost:3030/calzado_deportivo/productos_por_marca?marca=${marca}`)
+                .get(`http://localhost:3031/calzado_deportivo/productos_por_marca?marca=${marca}`)
                 .then((response) => setProductos(response.data))
                 .catch((error) => console.error('Error al obtener productos por marca:', error));
 
             axios
-                .get(`http://localhost:3030/calzado_deportivo/productos_nuevos_por_marca?marca=${marca}`)
+                .get(`http://localhost:3031/calzado_deportivo/productos_nuevos_por_marca?marca=${marca}`)
                 .then((response) => setProductosNuevos(response.data))
                 .catch((error) => {
                     setProductosNuevos([])
@@ -24,7 +25,7 @@ const Contenido_Inicio = ({ marca, icono }) => {
                 });
 
             axios
-                .get(`http://localhost:3030/calzado_deportivo/mejores_productos_por_marca?marca=${marca}`)
+                .get(`http://localhost:3031/calzado_deportivo/mejores_productos_por_marca?marca=${marca}`)
                 .then((response) => setMejoresProductos(response.data))
                 .catch((error) => {
                     setMejoresProductos([])
@@ -79,27 +80,24 @@ const Contenido_Inicio = ({ marca, icono }) => {
 
             <div className="p-1 mb-4 rounded backdrop-blur-lg">
 
-                {productos !== null && productos && productos.length > 0 ? (
+                {mejoresProductos.productos !== null && mejoresProductos.productos && mejoresProductos.productos.length > 0 ? (
                     <ActiveSlider productos={mejoresProductos.productos} titulo={"Mejores calificados"} />
                 ) : (
                     <p></p>
                 )}
             </div>
-            <div className="p-1 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-                {/* {productos !== null && productos && productos.length > 0 ? (
-                    <ActiveSlider productos={productosNuevos.productos} titulo={"Nuevos productos"} />
-                ) : (
-                    <p></p>
-                )}
-                {productos !== null && productos && productos.length > 0 ? (
-                    <ActiveSlider productos={mejoresProductos.productos} titulo={"Mejores calificados"} />
-                ) : (
-                    <p></p>
-                )} */}
-            </div>
+            {productos !== null && productos && productos.length > 0 ? (
+                <div className="p-1 mb-4 rounded backdrop-blur-lg">
+                    <PaginacionProductos productos={productos} />
 
-            <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-                {/* Interior de una data que se desea*/}
+                </div>) : (
+                ''
+            )}
+            {/* <div className="p-1 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+
+            </div>
+ */}
+            {/* <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
@@ -167,7 +165,7 @@ const Contenido_Inicio = ({ marca, icono }) => {
                         </svg>
                     </p>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
