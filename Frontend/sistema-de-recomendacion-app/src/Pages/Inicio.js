@@ -49,7 +49,7 @@ const Inicio = () => {
                         <a className="flex items-center ps-2.5 mb-5">
                             <PiSneakerMoveLight className="w-20 h-20 text-black dark:text-white" />
                             {/* <img src="" className="w-20 h-20" alt="SHOEMMENDER Logo" /> */}
-                            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">SHOEMMENDER</span>
+                            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">UTAMMENDER</span>
                         </a>
                         <ul className="space-y-2 font-medium">
                             <li>
