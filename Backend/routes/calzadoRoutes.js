@@ -304,8 +304,4 @@ router.get('/productos_en_fecha', async (req, res) => {
     }
 });
 
-
-
-
-
 module.exports = router;

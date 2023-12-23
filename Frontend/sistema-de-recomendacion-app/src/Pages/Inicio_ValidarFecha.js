@@ -5,6 +5,7 @@ import LiveMessagesScrapy from '../components/messages/ScrapyMessage';
 const Inicio_fecha = () => {
     const [fecha, setFecha] = useState('');
     const [datosActuales, setDatosActuales] = useState(null);
+    const [procesoExtraccion, setProcesoExtraccion] = useState(null)
 
     useEffect(() => {
         const obtenerDatos = async () => {
@@ -39,13 +40,15 @@ const Inicio_fecha = () => {
 
     return (
         <div style={{ position: 'relative', zIndex: 2 }}>
+            {/* Preguntar al usuario si desea ver datos del dia de ayer */}
+            {/* Si pone si, cargar y mostrar el proceso de extraccion de datos */}
+            {/* Si pone no, esperar a que se extraigan los datos de la informacion */}
             {datosActuales ? (
                 <p>¡Sí hay datos!</p>
             ) : (
                 <p>El proceso de Extraccion aun no ha culminado</p>
             )}
             <LiveMessagesScrapy />
-
         </div>
     );
 };

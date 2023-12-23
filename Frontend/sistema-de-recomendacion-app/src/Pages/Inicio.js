@@ -1,23 +1,23 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { PiSneakerFill, PiSneakerMoveLight } from "react-icons/pi";
-import { SiReebok, SiNike, SiAdidas, SiPuma, SiUnderarmour } from "react-icons/si";
+import { SiReebok, SiNike, SiAdidas, SiPuma, SiUnderarmour, SiNewbalance } from "react-icons/si";
 import { MdStars } from "react-icons/md";
 import Contenido_Inicio from '../components/Contenido_Inicio';
 import ParticlesBackground from '../components/config/ParticlesBackground';
 // import './App.css';
 
 const Inicio = () => {
-
     const [marcas, setMarcas] = useState([]);
     const [marcaSeleccionada, setMarcaSeleccionada] = useState('Nike');
     const [links_images] = useState([
-        { marca: "Vans", links: "", num: 0 },
+        { marca: "Vans", links: '', num: 0 },
         { marca: "Reebok", links: (<SiReebok className="w-auto h-auto" />), num: 0 },
         { marca: "Adidas", links: (<SiAdidas className="w-auto h-auto" />), num: 0 },
         { marca: "Nike", links: (<SiNike className="w-auto h-auto" />), num: 0 },
         { marca: "Puma", links: (<SiPuma className="w-auto h-auto" />), num: 0 },
         { marca: "Under Armour", links: (<SiUnderarmour className="w-auto h-auto" />), num: 0 },
+        { marca: "New Balance", links: (<SiNewbalance className="w-auto h-auto" />), num: 0 },
         { marca: "Converse", links: (<MdStars className="w-auto h-auto" />), num: 0 }]);
 
     useEffect(() => {
@@ -37,6 +37,7 @@ const Inicio = () => {
         const linkEncontrado = links_images && links_images.find(obj => obj.marca.toLowerCase() === marca.toLowerCase());
         return linkEncontrado ? linkEncontrado.links : (<a>No hay logo</a>);
     };
+
     const handle_actualizarMarca = (marca) => {
         setMarcaSeleccionada(marca)
     }
@@ -45,7 +46,7 @@ const Inicio = () => {
         <>
             <div style={{ position: 'relative', zIndex: 2 }}>
                 <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0">
-                    <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm">
+                    <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm select-none">
                         <a className="flex items-center ps-2.5 mb-5">
                             <PiSneakerMoveLight className="w-20 h-20 text-black dark:text-white" />
                             {/* <img src="" className="w-20 h-20" alt="SHOEMMENDER Logo" /> */}
@@ -93,7 +94,7 @@ const Inicio = () => {
                                                             marca && handle_actualizarMarca(marca.marca);
                                                         }} >
                                                         <div className='grid grid-cols-2 md:grid-cols-3 items-center'>
-                                                            <div className=''>
+                                                            <div >
                                                                 {obtener_img(marca.marca)}
                                                             </div>
                                                             <div>

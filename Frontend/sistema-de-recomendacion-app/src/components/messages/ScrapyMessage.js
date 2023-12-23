@@ -16,10 +16,10 @@ const UltimoProcesoComponent = () => {
       // Verificar si la fecha del último proceso coincide con la fecha actual
       const fechaUltimoProceso = new Date(data.fecha).toDateString();
       const fechaActual = new Date().toDateString();
-      if (fechaUltimoProceso === fechaActual) {
-        // Redirigir a la página /home
-        navigate('/home');
-      }
+      // if (ultimoProceso.resultado == false) {
+      //   // Redirigir a la página /home
+      //   navigate('/home');
+      // }
     } catch (error) {
       console.error('Error al obtener el último proceso:', error);
       setError('Error al obtener el último proceso');
@@ -39,13 +39,19 @@ const UltimoProcesoComponent = () => {
     return () => clearInterval(intervalId);
   }, []); // El segundo parámetro del useEffect es un array de dependencias, [] significa que se ejecutará solo al montar y desmontar
 
+  useEffect(() => {
+    if (ultimoProceso) {
+      // Redirigir a la página /home
+      navigate('/home');
+    }
+  }, [ultimoProceso])
   return (
     <div>
       {ultimoProceso ? (
         <div>
           <h2>Último Proceso:</h2>
           <p>Estado: {ultimoProceso.estado}</p>
-          <p>Resultado: {ultimoProceso.resultado ? 'Éxito' : 'Fallo'}</p>
+          <p>Resultado: {ultimoProceso.resultado ? 'Aún extrayendo Datos' : 'Datos extraídos finalizados'}</p>
           <p>Fecha: {new Date(ultimoProceso.fecha).toLocaleString()}</p>
         </div>
       ) : (
