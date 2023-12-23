@@ -52,8 +52,8 @@ const ProductCard = ({ producto }) => {
   return (
     <div className={`rounded-lg lg:w-80 lg:h-auto`} key={producto._id}>
       <div
-        className={`w-full h-full max-w-sm bg-white bg-opacity-0  ${productosSeleccionados.includes(producto._id) ? 'border-red-500 border-4 ' : 'border-black border '
-          }rounded-lg shadow dark:bg-white-800  transition transform hover:scale-105 duration-300 cursor-pointer relative`}
+        className={`w-full h-full max-w-sm bg-white bg-opacity-0 rounded-lg  ${productosSeleccionados.includes(producto._id) ? 'border-red-500 border-4 shadow-lg' : 'shadow-2xl '
+          } shadow dark:bg-white-800  transition transform hover:scale-105 duration-300 cursor-pointer relative`}
         onDoubleClick={() => insertarProducto(producto._id)}
         onMouseEnter={() => setTooltipVisible(true)}
         onMouseLeave={() => setTooltipVisible(false)}

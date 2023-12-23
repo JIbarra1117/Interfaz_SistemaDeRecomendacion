@@ -71,14 +71,14 @@ const Contenido_Inicio = ({ marca, icono }) => {
                 </div>
             </div>
             {productosNuevos.productos !== null && productosNuevos.productos && productosNuevos.productos.length > 0 ? (
-                <div className="p-1 mb-4 rounded backdrop-blur-lg">
+                <div className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl">
                     <ActiveSlider productos={productosNuevos.productos} titulo={"Nuevos productos"} />
 
                 </div>) : (
                 ''
             )}
 
-            <div className="p-1 mb-4 rounded backdrop-blur-lg">
+            <div className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl">
 
                 {mejoresProductos.productos !== null && mejoresProductos.productos && mejoresProductos.productos.length > 0 ? (
                     <ActiveSlider productos={mejoresProductos.productos} titulo={"Mejores calificados"} />
@@ -87,7 +87,7 @@ const Contenido_Inicio = ({ marca, icono }) => {
                 )}
             </div>
             {productos !== null && productos && productos.length > 0 ? (
-                <div className="p-1 mb-4 rounded backdrop-blur-lg">
+                <div className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl">
                     <PaginacionProductos productos={productos} />
 
                 </div>) : (

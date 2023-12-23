@@ -23,7 +23,7 @@ const ActiveSlider = ({ productos, titulo }) => {
     };
 
     return (
-        <div className="max-w mx-auto ">
+        <div className="max-w mx-auto select-none">
             <div className="grid grid-cols-1 p-5 rounded overflow-hidden text-black dark:text-white ">
                 <div className="p-6">
                     <h1 className="flex items-center text-5xl font-extrabold dark:text-white">

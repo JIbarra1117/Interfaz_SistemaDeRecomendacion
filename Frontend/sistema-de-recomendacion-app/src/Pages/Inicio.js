@@ -5,9 +5,11 @@ import { SiReebok, SiNike, SiAdidas, SiPuma, SiUnderarmour, SiNewbalance } from 
 import { MdStars } from "react-icons/md";
 import Contenido_Inicio from '../components/Contenido_Inicio';
 import ParticlesBackground from '../components/config/ParticlesBackground';
+import ContenidoRecomendaciones from './Recomendaciones';
 // import './App.css';
 
 const Inicio = () => {
+    const [paginaSeleccionada, setPaginaSeleccionada] = useState('')
     const [marcas, setMarcas] = useState([]);
     const [marcaSeleccionada, setMarcaSeleccionada] = useState('Nike');
     const [links_images] = useState([
@@ -19,7 +21,8 @@ const Inicio = () => {
         { marca: "Under Armour", links: (<SiUnderarmour className="w-auto h-auto" />), num: 0 },
         { marca: "New Balance", links: (<SiNewbalance className="w-auto h-auto" />), num: 0 },
         { marca: "Converse", links: (<MdStars className="w-auto h-auto" />), num: 0 }]);
-
+    // Declaracion de lista paginas y navegar
+    const listaPaginas = ['Marcas registradas', 'Recomendaciones'];
     useEffect(() => {
         axios.get('http://localhost:3031/calzado_deportivo/numero_calzados_por_marca')
             .then(response => {
@@ -42,11 +45,16 @@ const Inicio = () => {
         setMarcaSeleccionada(marca)
     }
 
+    const handle_paginaSeleccionada = (pagina) => {
+        console.log(paginaSeleccionada)
+        setPaginaSeleccionada(pagina)
+    }
+
     return (
         <>
             <div style={{ position: 'relative', zIndex: 2 }}>
                 <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0">
-                    <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm select-none">
+                    <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm select-none shadow-2xl">
                         <a className="flex items-center ps-2.5 mb-5">
                             <PiSneakerMoveLight className="w-20 h-20 text-black dark:text-white" />
                             {/* <img src="" className="w-20 h-20" alt="SHOEMMENDER Logo" /> */}
@@ -54,18 +62,21 @@ const Inicio = () => {
                         </a>
                         <ul className="space-y-2 font-medium">
                             <li>
-                                <a href="#" className="flex items-center p-2 text-blue-900 rounded-lg dark:text-white hover:bg-blue-100 dark:hover:bg-blue-700 group">
+                                <a
+                                    href="#"
+                                    className="flex items-center p-2 text-blue-900 rounded-lg dark:text-white hover:bg-blue-100 dark:hover:bg-blue-700 group"
+                                    onClick={() => { handle_paginaSeleccionada('Recomendaciones') }}>
                                     <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
                                     </svg>
-                                    <span className="flex-1 ms-3 whitespace-nowrap">Sistema de recomendacion</span>
+                                    <span className="flex-1 ms-3 whitespace-nowrap">Recomendaciones</span>
                                 </a>
                             </li>
                             <li>
                                 <details className="group [&_summary::-webkit-details-marker]:hidden">
                                     <summary className="flex cursor-pointer items-center w-full p-2 text-base text-blue-900 transition duration-75 rounded-lg group hover:bg-blue-100 dark:text-white dark:hover:bg-blue-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
-                                        <PiSneakerFill />
-                                        <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Marcas Registradas</span>
+                                        <PiSneakerFill className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                                        <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Marcas registradas</span>
                                         <span
                                             className="shrink-0 transition duration-300 group-open:-rotate-180"
                                         >
@@ -83,15 +94,16 @@ const Inicio = () => {
                                             </svg>
                                         </span>
                                     </summary>
-                                    <ul className="mt-1 space-y-1 px-1 ">
+                                    <ul className="mt-1 space-y-1 px-1">
                                         <div className="grid grid-cols-2 md:grid-cols-2 items-center">
                                             {marcas.map((marca) => (
-                                                <div key={marca.marca}>
+                                                <div key={marca.marca} >
                                                     <button type="button"
                                                         className="text-black-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none transition hover:scale-110 hover:shadow-xl focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-black-600 dark:bg-blue-800 dark:border-blue-700 dark:text-white dark:hover:bg-blue-700 me-2 mb-2"
                                                         onClick={() => {
                                                             // console.log("Valor de marca:", marca);
                                                             marca && handle_actualizarMarca(marca.marca);
+                                                            handle_paginaSeleccionada('Marcas registradas');
                                                         }} >
                                                         <div className='grid grid-cols-2 md:grid-cols-3 items-center'>
                                                             <div >
@@ -118,7 +130,18 @@ const Inicio = () => {
                 <div className="p-4 sm:ml-80">
                     {/* <Dashboard marca={marcaSeleccionada}></Dashboard> */}
                     {/* <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"> */}
-                    <Contenido_Inicio marca={marcaSeleccionada} icono={obtener_img(marcaSeleccionada)} />
+                    {
+                        paginaSeleccionada !== '' ?
+                            listaPaginas.indexOf(paginaSeleccionada) == 0 ?
+                                <Contenido_Inicio marca={marcaSeleccionada} icono={obtener_img(marcaSeleccionada)} /> :
+                                listaPaginas.indexOf(paginaSeleccionada) == 1 ?
+                                    <ContenidoRecomendaciones />
+
+                                    : 'No hay pagina seleccionada'
+                            :
+                            'Cargando'
+                    }
+
                     {/* </div> */}
                 </div>
             </div>

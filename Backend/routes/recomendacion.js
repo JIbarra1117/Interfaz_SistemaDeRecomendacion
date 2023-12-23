@@ -47,7 +47,7 @@ async function calculateRecommendations(res) {
 
         // Obtener los índices de los productos más similares
         const sortedSimilarities = Object.entries(cosineSimilarities).sort((a, b) => b[1] - a[1]);
-        const topRecommendationsIndices = sortedSimilarities.slice(1, 11).map(([index]) => parseInt(index));
+        const topRecommendationsIndices = sortedSimilarities.slice(1, 31).map(([index]) => parseInt(index));
 
         // Obtener los objetos completos de los productos recomendados
         const topRecommendations = topRecommendationsIndices.map(index => data[index]);
@@ -105,7 +105,7 @@ async function calculateRecommendationsByIds(res, selectedIds) {
 
         // Obtiene los índices de los productos más similares
         const sortedSimilarities = Object.entries(cosineSimilarities).sort((a, b) => b[1] - a[1]);
-        const topRecommendationsIndices = sortedSimilarities.slice(1, 11).map(([index]) => parseInt(index));
+        const topRecommendationsIndices = sortedSimilarities.slice(1, 31).map(([index]) => parseInt(index));
 
         // Obtiene los objetos completos de los productos recomendados
         const topRecommendations = topRecommendationsIndices.map(index => data[index]);

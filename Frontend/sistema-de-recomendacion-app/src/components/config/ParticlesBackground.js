@@ -18,7 +18,7 @@ const ParticlesBackground = ({ productos, titulo }) => {
                 options={{
                     background: {
                         color: {
-                            value: "#2461CB",
+                            value: "#596FB7",
                         },
                     },
                     fpsLimit: 120,
