@@ -1,64 +1,172 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
 
-const UltimoProcesoComponent = () => {
-  const [ultimoProceso, setUltimoProceso] = useState(null);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-
-  const obtenerUltimoProceso = async () => {
-    try {
-      const response = await fetch('http://localhost:3031/procesoScrapy/ultimoProceso');
-      const data = await response.json();
-      setUltimoProceso(data);
-      setError(null);
-
-      // Verificar si la fecha del último proceso coincide con la fecha actual
-      const fechaUltimoProceso = new Date(data.fecha).toDateString();
-      const fechaActual = new Date().toDateString();
-      // if (ultimoProceso.resultado == false) {
-      //   // Redirigir a la página /home
-      //   navigate('/home');
-      // }
-    } catch (error) {
-      console.error('Error al obtener el último proceso:', error);
-      setError('Error al obtener el último proceso');
-    }
-  };
+const MensajeScrapy = () => {
+  // const [ultimoProceso, setUltimoProceso] = useState(null);
+  const [mensajeScrapy, setMensajeScrapy] = useState(null);
+  const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
   useEffect(() => {
-    // Obtener el último proceso al cargar el componente
-    obtenerUltimoProceso();
+    const socket = io("http://localhost:3031?Key-Cliente=React", {
+      transports: ["websocket"],
+      query: {
+        debug: true,
+      },
+    });
 
-    // Configurar intervalo para obtener el último proceso cada minuto
-    const intervalId = setInterval(() => {
-      obtenerUltimoProceso();
-    }, 60000); // 60000 milisegundos = 1 minuto
+    socket.on("scrapy_message", (data) => {
+      console.log("Mensaje recibido desde Flask:", data.message);
+      setMensajeScrapy(data.message);
+      setMostrarMensaje(true);
 
-    // Limpiar el intervalo al desmontar el componente
-    return () => clearInterval(intervalId);
-  }, []); // El segundo parámetro del useEffect es un array de dependencias, [] significa que se ejecutará solo al montar y desmontar
+      // Ocultar el mensaje después de 5000 milisegundos (5 segundos)
+      setTimeout(() => {
+        setMostrarMensaje(false);
+        setMensajeScrapy(null);
+      }, 5000);
+    });
 
-  useEffect(() => {
-    if (ultimoProceso) {
-      // Redirigir a la página /home
-      navigate('/home');
-    }
-  }, [ultimoProceso])
+    return () => {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+    };
+  }, []);
+
   return (
     <div>
-      {ultimoProceso ? (
-        <div>
-          <h2>Último Proceso:</h2>
-          <p>Estado: {ultimoProceso.estado}</p>
-          <p>Resultado: {ultimoProceso.resultado ? 'Aún extrayendo Datos' : 'Datos extraídos finalizados'}</p>
-          <p>Fecha: {new Date(ultimoProceso.fecha).toLocaleString()}</p>
+      {mostrarMensaje ? (
+        <div className="h-20">
+          {mostrarMensaje ? (
+            <>
+              <div
+                id="sticky-banner"
+                tabIndex="-1"
+                className={`fixed z-50 flex justify-between w-full h-15 p-4 border-b rounded-xl border-gray-200 bg-blue-700${
+                  mostrarMensaje
+                    ? " animate-flip-down animate-ease-in-out animate-normal"
+                    : " animate-flip-down animate-ease-in-out animate-reverse"
+                }`}
+            >
+                <div className="flex items-center mx-auto">
+                  <span>HEY!!</span>
+                  <span className="w-2"> </span>
+                  <p className="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400">
+                    <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full dark:bg-gray-600 w-6 h-6 items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3 h-3 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 18 19"
+                      >
+                        <path d="M15 1.943v12.114a1 1 0 0 1-1.581.814L8 11V5l5.419-3.871A1 1 0 0 1 15 1.943ZM7 4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v5a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2V4ZM4 17v-5h1v5H4ZM16 5.183v5.634a2.984 2.984 0 0 0 0-5.634Z" />
+                      </svg>
+                      <span className="sr-only">Light bulb</span>
+                    </span>
+                    <span>
+                      {mensajeScrapy
+                        ? mensajeScrapy.estado === "iniciado"
+                          ? "En este momento está iniciando la actualización de datos."
+                          : mensajeScrapy.estado === "completado"
+                          ? "En este momento ha completado la actualización de datos."
+                          : mensajeScrapy.estado === "extrayendo"
+                          ? "En este momento se están obteniendo nuevos calzados deportivos."
+                          : "No hay estado de scrapy"
+                        : "No hay mensaje"}
+                      {mensajeScrapy ? mensajeScrapy.porcentaje : ""}
+                    </span>
+                  </p>
+                </div>
+                <div className="flex items-center">
+                  <button
+                    data-dismiss-target="#sticky-banner"
+                    type="button"
+                    className="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Close banner</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div
+              id="sticky-banner"
+              tabIndex="-1"
+              className={`fixed z-50 flex justify-between w-full h-15 p-4 border-b rounded-xl border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600${
+                mostrarMensaje
+                  ? " animate-flip-down animate-ease-in-out animate-normal"
+                  : " animate-flip-down animate-ease-in-out animate-reverse"
+              }`}
+            >
+              <div className="flex items-center mx-auto">
+                <span>HEY!!</span>
+                <span className="w-2"> </span>
+                <p className="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400">
+                  <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full dark:bg-gray-600 w-6 h-6 items-center justify-center flex-shrink-0">
+                    <svg
+                      className="w-3 h-3 text-gray-500 dark:text-gray-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 18 19"
+                    >
+                      <path d="M15 1.943v12.114a1 1 0 0 1-1.581.814L8 11V5l5.419-3.871A1 1 0 0 1 15 1.943ZM7 4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v5a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2V4ZM4 17v-5h1v5H4ZM16 5.183v5.634a2.984 2.984 0 0 0 0-5.634Z" />
+                    </svg>
+                    <span className="sr-only">Light bulb</span>
+                  </span>
+                  <span>
+                    Prueba de mensaje scrapy
+                  </span>
+                </p>
+              </div>
+              <div className="flex items-center">
+                <button
+                  data-dismiss-target="#sticky-banner"
+                  type="button"
+                  className="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  <svg
+                    className="w-3 h-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                    />
+                  </svg>
+                  <span className="sr-only">Close banner</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
-        <p>{error || 'Cargando...'}</p>
+        ""
       )}
     </div>
   );
 };
 
-export default UltimoProcesoComponent;
+export default MensajeScrapy;

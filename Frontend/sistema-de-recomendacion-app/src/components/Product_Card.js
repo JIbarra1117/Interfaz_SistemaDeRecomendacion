@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import truncarTexto from '../complements/Format';
+import React, {  useState } from 'react';
+import {truncarTexto} from '../utils/formatUtil';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import StarRating from './estrellas_calificacion';
@@ -59,7 +59,7 @@ const ProductCard = ({ producto }) => {
         onMouseLeave={() => setTooltipVisible(false)}
       >
         <a key={producto._id}>
-          <img className="w-full h-60 object-cover rounded-t-lg" src={producto.imagenes[0]} alt="product image" />
+          <img className="w-full h-60 object-cover rounded-t-lg" src={producto.imagenes[0]} alt="imagen del producto" />
         </a>
         <div className="px-5 pb-5 pt-6">
           <a>
@@ -69,7 +69,7 @@ const ProductCard = ({ producto }) => {
             <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">Color: {producto.color}</h5>
           </a>
           <div className="flex items-center mt-2.5 mb-5">
-            {producto.calificacion == -1 ? (
+            {producto.calificacion === -1 ? (
               <span className="bg-green-800 text-white text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-800 dark:text-white ms-3">
                 <a>Nuevo</a>
               </span>
@@ -106,7 +106,7 @@ const ProductCard = ({ producto }) => {
             </div>
           )}
           {tooltipVisible && (
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-2 bg-gray-800 text-white text-sm rounded opacity-90">
+            <div className="absolute top-0 left-0 p-2 bg-gray-800 text-white text-sm rounded opacity-90">
               {producto.descripcion}
             </div>
           )}
