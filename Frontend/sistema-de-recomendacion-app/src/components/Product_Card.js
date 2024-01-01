@@ -1,77 +1,102 @@
-import React, {  useState } from 'react';
-import {truncarTexto} from '../utils/formatUtil';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import StarRating from './estrellas_calificacion';
+import React, { useEffect, useState } from "react";
+import { truncarTexto } from "../utils/formatUtil";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import StarRating from "./estrellas_calificacion";
 import { FaHeartBroken } from "react-icons/fa";
 
-
-const ProductCard = ({ producto }) => {
+const ProductCard = ({ producto, estado }) => {
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [corazonVisible, setCorazonVisible] = useState(false);
   const [corazonRotoVisible, setCorazonRotoVisible] = useState(false);
+  const [bordeMarcado, setBordeMarcado] = useState(false);
+  let estadoAux = estado;
+
+  useEffect(() => {
+    setBordeMarcado(estado)
+    
+  }, []);
 
   if (producto.descripcion !== undefined) {
-    producto.descripcion = producto.descripcion ? truncarTexto(producto.descripcion) : '';
+    producto.descripcion = producto.descripcion
+      ? truncarTexto(producto.descripcion)
+      : "";
   }
 
   const insertarProducto = (id) => {
     // Obtener productos almacenados en localStorage
-    const productosGuardados = JSON.parse(localStorage.getItem('productosSeleccionados')) || [];
+    const productosGuardados =
+      JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
 
     // Verificar si el producto ya está en la lista
     if (!productosGuardados.includes(id)) {
       setCorazonRotoVisible(false);
-      console.log('Data ingresada');
+      console.log("Data ingresada");
       // Añadir el nuevo producto al array
       const nuevosProductos = [...productosGuardados, id];
 
       // Actualizar el estado y localStorage
       setProductosSeleccionados(nuevosProductos);
-      localStorage.setItem('productosSeleccionados', JSON.stringify(nuevosProductos));
+      localStorage.setItem(
+        "productosSeleccionados",
+        JSON.stringify(nuevosProductos)
+      );
       console.log(nuevosProductos);
       setCorazonVisible(true);
       setTimeout(() => setCorazonVisible(false), 1000); // Ocultar el corazón después de 1 segundo
     } else {
       setCorazonVisible(false);
       // Avisar que se eliminó
-      console.log('Data eliminada');
-      const nuevosProductos = productosGuardados.filter((idArray) => idArray !== id);
+      console.log("Data eliminada");
+      const nuevosProductos = productosGuardados.filter(
+        (idArray) => idArray !== id
+      );
       console.log(nuevosProductos);
 
       // Actualizar el estado y localStorage
       setProductosSeleccionados(nuevosProductos);
       // Eliminar del array el producto
-      localStorage.setItem('productosSeleccionados', JSON.stringify(nuevosProductos));
+      localStorage.setItem(
+        "productosSeleccionados",
+        JSON.stringify(nuevosProductos)
+      );
       setCorazonRotoVisible(true);
       setTimeout(() => setCorazonRotoVisible(false), 1000); // Ocultar el corazón roto después de 1 segundo
+      setBordeMarcado(false);
     }
   };
 
   return (
     <div className={`rounded-lg lg:w-80 lg:h-auto`} key={producto._id}>
       <div
-        className={`w-full h-full max-w-sm bg-white bg-opacity-0 rounded-lg  ${productosSeleccionados.includes(producto._id) ? 'border-red-500 border-4 shadow-lg' : 'shadow-2xl '
-          } shadow dark:bg-white-800  transition transform hover:scale-105 duration-300 cursor-pointer relative`}
+        className={`w-full h-full max-w-sm bg-white bg-opacity-0 rounded-lg  ${
+          productosSeleccionados.includes(producto._id) || bordeMarcado
+            ? "border-red-500 border-4 shadow-lg"
+            : "shadow-2xl "
+        } shadow dark:bg-white-800  transition transform hover:scale-105 duration-300 cursor-pointer relative`}
         onDoubleClick={() => insertarProducto(producto._id)}
         onMouseEnter={() => setTooltipVisible(true)}
         onMouseLeave={() => setTooltipVisible(false)}
       >
         <a key={producto._id}>
-          <img className="w-full h-60 object-cover rounded-t-lg" src={producto.imagenes[0]} alt="imagen del producto" />
+          <img
+            className="w-full h-60 object-cover rounded-t-lg"
+            src={producto.imagenes[0]}
+            alt="imagen del producto"
+          />
         </a>
         <div className="px-5 pb-5 pt-6">
-          <a>
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{producto.modelo}</h5>
-          </a>
-          <a>
-            <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">Color: {producto.color}</h5>
-          </a>
+          <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+            {producto.modelo}
+          </h2>
+          <h2 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">
+            Color: {producto.color}
+          </h2>
           <div className="flex items-center mt-2.5 mb-5">
             {producto.calificacion === -1 ? (
               <span className="bg-green-800 text-white text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-800 dark:text-white ms-3">
-                <a>Nuevo</a>
+                <p>Nuevo</p>
               </span>
             ) : (
               <>
@@ -79,13 +104,15 @@ const ProductCard = ({ producto }) => {
                   <StarRating calificacion={producto.calificacion}></StarRating>
                 </div>
                 <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
-                  <a>{producto.calificacion}</a>
+                  <p>{producto.calificacion}</p>
                 </span>
               </>
             )}
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">${producto.precio}</span>
+            <span className="text-3xl font-bold text-gray-900 dark:text-white">
+              ${producto.precio}
+            </span>
             <a
               href={producto.url_calzado}
               className="text-white bg-black-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-black dark:hover:bg-gray-700 dark:focus:ring-blue-800"
@@ -101,15 +128,18 @@ const ProductCard = ({ producto }) => {
             </div>
           )}
           {corazonRotoVisible && (
-            <div className="absolute top-2 right-2 text-red-500" >
+            <div className="absolute top-2 right-2 text-red-500">
               <FaHeartBroken className="w-6 h-6 fill-current" />
             </div>
           )}
-          {tooltipVisible && (
-            <div className="absolute top-0 left-0 p-2 bg-gray-800 text-white text-sm rounded opacity-90">
-              {producto.descripcion}
-            </div>
-          )}
+          {tooltipVisible &&
+            (producto.descripcion === "" ? (
+              ""
+            ) : (
+              <div className="absolute top-0 left-0 p-2 bg-gray-800 text-white text-sm rounded opacity-90">
+                {producto.descripcion}
+              </div>
+            ))}
         </div>
       </div>
     </div>
@@ -117,6 +147,3 @@ const ProductCard = ({ producto }) => {
 };
 
 export default ProductCard;
-
-
-

@@ -1,6 +1,10 @@
-
 function obtenerListaProductos() {
-    return JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
+  return JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
 }
 
-export {obtenerListaProductos};
+function obtenerSiProductoEsMarcado(id) {
+  const data = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
+    return data.includes(id)
+}
+
+export { obtenerListaProductos, obtenerSiProductoEsMarcado };

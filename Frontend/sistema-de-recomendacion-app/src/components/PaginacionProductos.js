@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./Product_Card";
+import {obtenerSiProductoEsMarcado} from '../utils/localDataUtil'
 
 const PaginacionProductos = ({ productos }) => {
   const itemsPerPage = 12; // Número de productos por página
@@ -53,27 +54,28 @@ const PaginacionProductos = ({ productos }) => {
   };
   return (
     <div className="max-w mx-auto">
-      <div className="p-6">
-        <h1 className="flex items-center text-5xl font-extrabold dark:text-white">
-          Todos los productos
-          {productos ? (
-            <span className="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
-              {productos.length}
-            </span>
-          ) : (
-            ""
-          )}
-        </h1>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4">
+      <h1 className="flex items-center text-5xl font-extrabold dark:text-white animate-fade animate-ease-in-out p-6">
+        Todos los productos
+        {productos ? (
+          <span
+            key={productos.length}
+            className="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2"
+          >
+            {productos.length}
+          </span>
+        ) : (
+          ""
+        )}
+      </h1>
+      <div
+        className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4 animate-fade animate-ease-in-out"
+        key={currentItems[0]._id}
+      >
         {currentItems.map((product) => (
           <>
-            <div
-              key={product._id}
-              className="flex items-center justify-center"
-            >
+            <div key={product._id} className="flex items-center justify-center">
               <div className="max-w-sm w-full">
-                <ProductCard producto={product}  />
+                <ProductCard producto={product} estado={obtenerSiProductoEsMarcado(product._id)} />
               </div>
             </div>
           </>

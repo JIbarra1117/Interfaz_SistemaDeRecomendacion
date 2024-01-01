@@ -25,7 +25,7 @@ const ParticlesBackground = ({ productos, titulo }) => {
                     interactivity: {
                         events: {
                             onClick: {
-                                enable: true,
+                                enable: false,
                             },
                             onHover: {
                                 enable: false,
@@ -61,18 +61,18 @@ const ParticlesBackground = ({ productos, titulo }) => {
                                 default: "bounce",
                             },
                             random: false,
-                            speed: 1,
+                            speed: 0.3,
                             straight: false,
                         },
                         number: {
                             density: {
                                 enable: true,
-                                area: 800,
+                                area: 1000,
                             },
                             value: 80,
                         },
                         opacity: {
-                            value: 0.5,
+                            value: 1,
                         },
                         shape: {
                             type: "circle",

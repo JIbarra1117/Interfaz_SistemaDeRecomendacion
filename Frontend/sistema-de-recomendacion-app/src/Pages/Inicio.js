@@ -7,36 +7,43 @@ import { obtenerNumnerosCalzadosPorMarcas } from "../api/calzado-deportivo";
 import { obtenerListaProductos } from "../utils/localDataUtil";
 import { listaIconos } from "../utils/formatUtil";
 import MensajeScrapy from "../components/messages/ScrapyMessage";
+import ActiveSliderSkeleton from "../components/skeletons/ActiveSliderSkeleton";
 // import './App.css';
 
 const Inicio = () => {
   const [paginaSeleccionada, setPaginaSeleccionada] = useState("");
   const [marcas, setMarcas] = useState([]);
   const [marcaSeleccionada, setMarcaSeleccionada] = useState("Nike");
-  const [sidebarAbierto, setSidebarAbierto] = useState(false);
   const [localStorageProductos, setLocalStorageProductos] = useState([]);
-  const sidebarRef = useRef(null);
   const [links_images] = useState(listaIconos);
   const [renderKey, setRenderKey] = useState(0);
+  const [sidebarAbierto, setSidebarAbierto] = useState(false);
+  const contenedorRef = useRef(null);
+  const [productosLoading, setProductosLoading] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const toggleDetails = () => {
+    setIsDetailsOpen(!isDetailsOpen);
+  };
 
-  // console.log("Referencia al sidebar:", sidebarRef.current);
-
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      // Si el clic no está dentro del área del sidebar, cierra el sidebar
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setSidebarAbierto(false);
-      }
-    };
-
-    // Agrega el manejador de eventos al documento cuando el sidebar se abre
-    if (sidebarAbierto) {
-      document.addEventListener("click", handleOutsideClick);
+  const handlePrductosLoading = (data) => {
+    setProductosLoading(data);
+  };
+  const toggleSidebar = () => {
+    setSidebarAbierto(!sidebarAbierto);
+  };
+  const cerrarSidebarExterior = (event) => {
+    if (
+      sidebarAbierto &&
+      contenedorRef.current &&
+      !contenedorRef.current.contains(event.target)
+    ) {
+      setSidebarAbierto(false);
     }
-
-    // Elimina el manejador de eventos cuando el componente se desmonta
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", cerrarSidebarExterior);
     return () => {
-      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("mousedown", cerrarSidebarExterior);
     };
   }, [sidebarAbierto]);
 
@@ -52,10 +59,6 @@ const Inicio = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (paginaSeleccionada === "Recomendacion") {
-    }
-  }, [paginaSeleccionada]);
   // Metodos para dise;o
   const obtener_img = (marca) => {
     const linkEncontrado =
@@ -79,20 +82,16 @@ const Inicio = () => {
     console.log(paginaSeleccionada);
     setPaginaSeleccionada(pagina);
   };
-
-  const handleToggleSidebar = () => {
-    setSidebarAbierto(!sidebarAbierto);
-  };
   return (
-    <>
+    <div>
       <div style={{ position: "relative", zIndex: 2 }}>
         <button
-          onClick={handleToggleSidebar}
-          data-drawer-target="cta-button-sidebar"
-          data-drawer-toggle="cta-button-sidebar"
-          aria-controls="cta-button-sidebar"
+          data-drawer-target="separator-sidebar"
+          data-drawer-toggle="separator-sidebar"
+          aria-controls="separator-sidebar"
           type="button"
-          className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          onClick={toggleSidebar} /*  */
+          className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg  lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 -600"
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -110,15 +109,15 @@ const Inicio = () => {
           </svg>
         </button>
         <aside
-          ref={sidebarRef}
+          ref={contenedorRef}
+          // className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0"
           className={`fixed top-0 left-0 z-40 w-80 h-screen transition-transform ${
             sidebarAbierto ? "translate-x-0" : "-translate-x-full"
-          } sm:translate-x-0`}
-          // className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0"
+          } lg:translate-x-0`}
           aria-label="Sidebar"
         >
           <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm select-none shadow-2xl">
-            <p className="flex items-center ps-2 mb-5">
+            <p className="flex items-center ps-2 mb-5" onClick={()=>{setPaginaSeleccionada("")}}>
               <PiSneakerMoveLight className="w-20 h-20 text-black dark:text-white" />
               <span className="self-center text-2xl font-extrabold whitespace-nowrap dark:text-white">
                 UTAMMENDER
@@ -147,7 +146,7 @@ const Inicio = () => {
                 </a>
               </li>
               <li>
-                <details className="group [&_summary::-webkit-details-marker]:hidden">
+                <details className="group [&_summary::-webkit-details-marker]:hidden"  onClick={toggleDetails}>
                   <summary
                     className="flex cursor-pointer items-center w-full p-2 text-base text-blue-900 transition duration-75 rounded-lg group hover:bg-blue-100 dark:text-white dark:hover:bg-blue-700"
                     aria-controls="dropdown-example"
@@ -172,7 +171,8 @@ const Inicio = () => {
                       </svg>
                     </span>
                   </summary>
-                  <ul className="mt-1 space-y-1 px-1">
+                  {/* <ul className="mt-1 space-y-1 px-1 transition animate-fade-up animate-ease-in-out group-open:animate-fade-down group-open:animate-ease-in-out"> */}
+                  <ul className={`mt-1 space-y-1 px-1`}>
                     <div className="grid grid-cols-2 md:grid-cols-2 items-center">
                       {marcas.map((marca) => (
                         <div key={marca.marca}>
@@ -200,16 +200,20 @@ const Inicio = () => {
           </div>
         </aside>
         {/* Contenido del sidebar */}
-        <div key={renderKey} className="p-4 sm:ml-80">
+        <div key={renderKey} className="p-4 lg:ml-80">
           <MensajeScrapy />
           {/* <Dashboard marca={marcaSeleccionada}></Dashboard> */}
           {/* <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"> */}
           {paginaSeleccionada !== "" ? (
             listaPaginas.indexOf(paginaSeleccionada) === 0 ? (
-              <ContenidoInicio
-                marca={marcaSeleccionada}
-                icono={obtener_img(marcaSeleccionada)}
-              />
+              <>
+                <ContenidoInicio
+                  marca={marcaSeleccionada}
+                  icono={obtener_img(marcaSeleccionada)}
+                  onProductosLoading={handlePrductosLoading}
+                />
+                {productosLoading ? <ActiveSliderSkeleton /> : ""}
+              </>
             ) : listaPaginas.indexOf(paginaSeleccionada) === 1 ? (
               localStorageProductos.length > 0 ? (
                 <ContenidoRecomendaciones />
@@ -241,15 +245,15 @@ const Inicio = () => {
             )
           ) : (
             <>
-              <section class="bg-white rounded-xl animate-fade-down animate-once">
-                <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
-                  <div class="mx-auto max-w-6xl text-center">
-                    <h2 class="max-w-5xl text-2xl font-bold leading-none tracking-tighter text-black md:text-5xl lg:text-6xl lg:max-w-7xl">
+              <section className="bg-white rounded-xl animate-fade-down animate-once">
+                <div className="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+                  <div className="mx-auto max-w-6xl text-center">
+                    <h2 className="max-w-5xl text-2xl font-bold leading-none tracking-tighter text-black md:text-5xl lg:text-6xl lg:max-w-7xl">
                       !Bienvenido a la aplicación de recomendación de calzado
                       deportivo UTAMMENDER!
                     </h2>
 
-                    <p class="mt-4 text-gray-500 sm:text-xl">
+                    <p className="mt-4 text-gray-500 sm:text-xl">
                       Una plataforma innovadora diseñada para ofrecer una
                       experiencia única a los usuarios en su búsqueda del par
                       ideal. Esta aplicación extrae información diariamente de
@@ -276,12 +280,14 @@ const Inicio = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mx-auto text-center">
-                      <div className="grid grid-cols-5 gap-4 mx-auto lg:grid-cols-5">
+                    <div className="mx-auto">
+                      <div className="grid grid-cols-3 gap-4 mx-auto sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                         {listaIconos.map((data) => (
-                          <div className="h-auto text-8xl text-neutral-600 " key={data.marca}>
+                          <div
+                            className="h-auto text-2xl sm:text-2xl md:text-4xl lg:text-8xl text-neutral-600 text-center mx-auto"
+                            key={data.marca}
+                          >
                             {data.links}
-                            
                           </div>
                         ))}
                       </div>
@@ -295,7 +301,7 @@ const Inicio = () => {
           {/* </div> */}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

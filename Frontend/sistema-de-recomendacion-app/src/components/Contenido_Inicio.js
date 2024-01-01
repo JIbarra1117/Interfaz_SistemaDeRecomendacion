@@ -1,60 +1,43 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ActiveSlider from "./Carrusel";
 import PaginacionProductos from "./PaginacionProductos";
-import MensajeScrapy from "./messages/ScrapyMessage";
-import ActiveSliderSkeleton from "./skeletons/ActiveSliderSkeleton";
+import {obtenerMejoresProductosPorMarca, obtenerProductosPorMarca, obtenerProductosNuevosPorMarca} from '../api/calzado-deportivo';
 
-const ContenidoInicio = ({ marca, icono }) => {
+const ContenidoInicio = ({ marca, icono, onProductosLoading }) => {
   // const [marcaSeleccionada, setMarcaSeleccionada] = useState('');
   const [productos, setProductos] = useState([]);
   const [productosNuevos, setProductosNuevos] = useState([]);
   const [mejoresProductos, setMejoresProductos] = useState([]);
-  const [loadingProductosNuevos, setLoadingProductosNuevos] = useState(true);
 
+  const handleLoadingProducto = (data) =>{
+    onProductosLoading(data)
+  };
   useEffect(() => {
     if (marca) {
-      setLoadingProductosNuevos(true);
+      handleLoadingProducto(true);
 
-      axios
-        .get(
-          `http://localhost:3031/calzado_deportivo/productos_por_marca?marca=${marca}`
+      Promise.all([
+        obtenerProductosPorMarca(marca), obtenerProductosNuevosPorMarca(marca),obtenerMejoresProductosPorMarca(marca)
+
+      ])
+        .then(
+          ([
+            productosResponse,
+            productosNuevosResponse,
+            mejoresProductosResponse,
+          ]) => {
+            setProductos(productosResponse.data);
+            setProductosNuevos(productosNuevosResponse.data);
+            setMejoresProductos(mejoresProductosResponse.data);
+            
+            handleLoadingProducto(false);
+          }
         )
-        .then((response) => {
-          setProductos(response.data);
-          setLoadingProductosNuevos(false);
-        })
         .catch((error) => {
           setProductos([]);
-          setLoadingProductosNuevos(false);
-          console.error("Error al obtener productos por marca:", error);
-        });
-
-      axios
-        .get(
-          `http://localhost:3031/calzado_deportivo/productos_nuevos_por_marca?marca=${marca}`
-        )
-        .then((response) => {
-          setProductosNuevos(response.data);
-          setLoadingProductosNuevos(false);
-        })
-        .catch((error) => {
           setProductosNuevos([]);
-          setLoadingProductosNuevos(false);
-          console.error("Error al obtener productos por marca:", error);
-        });
-
-      axios
-        .get(
-          `http://localhost:3031/calzado_deportivo/mejores_productos_por_marca?marca=${marca}`
-        )
-        .then((response) => {
-          setMejoresProductos(response.data);
-          setLoadingProductosNuevos(false);
-        })
-        .catch((error) => {
           setMejoresProductos([]);
-          setLoadingProductosNuevos(false);
+          handleLoadingProducto(false);
           console.error("Error al obtener productos por marca:", error);
         });
     }
@@ -88,11 +71,13 @@ const ContenidoInicio = ({ marca, icono }) => {
           <p className="text-2xl text-gray-400 dark:text-gray-500"></p>
         </div>
       </div>
-      <div>
+      <div className="animate-fade animate-ease-in-out">
         {productosNuevos.productos !== null &&
         productosNuevos.productos &&
         productosNuevos.productos.length > 0 ? (
-          <div className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl">
+          <div
+            className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl"
+          >
             <ActiveSlider
               productos={productosNuevos.productos}
               titulo={"Nuevos productos"}
@@ -102,7 +87,9 @@ const ContenidoInicio = ({ marca, icono }) => {
           ""
         )}
 
-        <div className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl">
+        <div
+          className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl"
+        >
           {mejoresProductos !== null &&
           mejoresProductos &&
           mejoresProductos.length > 0 ? (
@@ -116,7 +103,9 @@ const ContenidoInicio = ({ marca, icono }) => {
           )}
         </div>
         {productos !== null && productos && productos.length > 0 ? (
-          <div className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl">
+          <div
+            className="p-1 mb-4 rounded backdrop-blur-sm shadow-2xl"
+          >
             <PaginacionProductos key={productos} productos={productos} />
           </div>
         ) : (
