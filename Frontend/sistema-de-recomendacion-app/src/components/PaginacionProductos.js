@@ -73,9 +73,9 @@ const PaginacionProductos = ({ productos }) => {
       >
         {currentItems.map((product) => (
           <>
-            <div key={product._id} className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <div className="max-w-sm w-full">
-                <ProductCard producto={product} estado={obtenerSiProductoEsMarcado(product._id)} />
+                <ProductCard producto={product} estado={obtenerSiProductoEsMarcado(product._id)} key={product._id}/>
               </div>
             </div>
           </>

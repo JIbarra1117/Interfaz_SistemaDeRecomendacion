@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StarRating from "./estrellas_calificacion";
 import { FaHeartBroken } from "react-icons/fa";
+import { deviceDetection } from "../utils/localDataUtil";
 
 const ProductCard = ({ producto, estado }) => {
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
@@ -11,12 +12,26 @@ const ProductCard = ({ producto, estado }) => {
   const [corazonVisible, setCorazonVisible] = useState(false);
   const [corazonRotoVisible, setCorazonRotoVisible] = useState(false);
   const [bordeMarcado, setBordeMarcado] = useState(false);
-  let estadoAux = estado;
 
   useEffect(() => {
-    setBordeMarcado(estado)
-    
+    setBordeMarcado(estado);
   }, []);
+
+  const handleDispositivoDetectadoParaClickear = (idProducto) => {
+    const device = deviceDetection(navigator);
+    switch (device) {
+      case "Celular":
+        insertarProducto(idProducto);
+        break;
+
+      case "Tablet":
+        insertarProducto(idProducto);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   if (producto.descripcion !== undefined) {
     producto.descripcion = producto.descripcion
@@ -68,7 +83,7 @@ const ProductCard = ({ producto, estado }) => {
   };
 
   return (
-    <div className={`rounded-lg lg:w-80 lg:h-auto`} key={producto._id}>
+    <div className='rounded-lg lg:w-80 lg:h-auto' key={producto._id}>
       <div
         className={`w-full h-full max-w-sm bg-white bg-opacity-0 rounded-lg  ${
           productosSeleccionados.includes(producto._id) || bordeMarcado
@@ -78,6 +93,7 @@ const ProductCard = ({ producto, estado }) => {
         onDoubleClick={() => insertarProducto(producto._id)}
         onMouseEnter={() => setTooltipVisible(true)}
         onMouseLeave={() => setTooltipVisible(false)}
+        onClick={()=>{handleDispositivoDetectadoParaClickear(producto._id)}} // Aqui se establece logica para detectar el dispositiivo donde se conexta e implementar el click
       >
         <a key={producto._id}>
           <img
@@ -121,14 +137,14 @@ const ProductCard = ({ producto, estado }) => {
             </a>
           </div>
           {corazonVisible && (
-            <div className="absolute top-2 right-2 text-red-500">
+            <div className="absolute top-2 right-2 text-red-500 z-50">
               <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                 <path d="M12 21.35l-1.45-1.32C5.4 14.25 2 11.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C16.09 3.81 17.76 3 19.5 3 22.58 3 25 5.42 25 8.5c0 2.78-3.4 5.75-8.55 11.54L12 21.35z" />
               </svg>
             </div>
           )}
           {corazonRotoVisible && (
-            <div className="absolute top-2 right-2 text-red-500">
+            <div className="absolute top-2 right-2 text-red-500 z-50">
               <FaHeartBroken className="w-6 h-6 fill-current" />
             </div>
           )}
@@ -136,7 +152,7 @@ const ProductCard = ({ producto, estado }) => {
             (producto.descripcion === "" ? (
               ""
             ) : (
-              <div className="absolute top-0 left-0 p-2 bg-gray-800 text-white text-sm rounded opacity-90">
+              <div className="absolute top-0 left-0 p-2 bg-gray-800 text-white text-sm rounded-lg opacity-90">
                 {producto.descripcion}
               </div>
             ))}

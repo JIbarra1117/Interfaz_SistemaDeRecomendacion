@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { obtenerUltimoProceso } from "../api/scrapy-procesos";
 import { obtenerCantidadProductos } from "../api/calzado-deportivo";
+import { insertarEstadoPaginaInicio } from "../utils/localDataUtil";
 
 const Inicio_fecha = () => {
   const [fecha, setFecha] = useState("");
@@ -9,9 +10,12 @@ const Inicio_fecha = () => {
   const [cantidadProductos, setCantidadProductos] = useState(0);
   const [modalDatos, setModalDatos] = useState(false);
   const navigate = useNavigate();
+  const [hasPassedInicio, setHasPassedInicio] = useState(false);
 
   // Ejecucion al iniciar el renderizado del componente
   useEffect(() => {
+    // Insertar el estado que ya ingreso a la pagina desde aqui
+    insertarEstadoPaginaInicio();
     // Convertir la fecha de cadena a objeto Date
     let fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0);
@@ -48,7 +52,7 @@ const Inicio_fecha = () => {
         setModalDatos(true);
       }
     }
-  }, [ultimoProceso,fecha,cantidadProductos,navigate]);
+  }, [ultimoProceso, fecha, cantidadProductos, navigate]);
 
   // Muestra un mensaje mientras se realiza la solicitud
   if (ultimoProceso === null) {

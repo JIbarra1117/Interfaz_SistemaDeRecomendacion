@@ -4,13 +4,19 @@ import { IoIosArrowBack } from "react-icons/io";
 import ContenidoInicio from "../components/Contenido_Inicio";
 import ContenidoRecomendaciones from "./Recomendaciones";
 import { obtenerNumnerosCalzadosPorMarcas } from "../api/calzado-deportivo";
-import { obtenerListaProductos } from "../utils/localDataUtil";
+import {
+  obtenerListaProductos,
+  insertarEstadoPaginaInicio,
+  obtenerEstadoPaginaInicio,
+} from "../utils/localDataUtil";
 import { listaIconos } from "../utils/formatUtil";
 import MensajeScrapy from "../components/messages/ScrapyMessage";
 import ActiveSliderSkeleton from "../components/skeletons/ActiveSliderSkeleton";
+import { useNavigate } from "react-router-dom";
+
 // import './App.css';
 
-const Inicio = () => {
+const Inicio = ({ estadoInicial }) => {
   const [paginaSeleccionada, setPaginaSeleccionada] = useState("");
   const [marcas, setMarcas] = useState([]);
   const [marcaSeleccionada, setMarcaSeleccionada] = useState("Nike");
@@ -21,6 +27,8 @@ const Inicio = () => {
   const contenedorRef = useRef(null);
   const [productosLoading, setProductosLoading] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const navigate = useNavigate();
+
   const toggleDetails = () => {
     setIsDetailsOpen(!isDetailsOpen);
   };
@@ -50,6 +58,11 @@ const Inicio = () => {
   // Declaracion de lista paginas y navegar
   const listaPaginas = ["Marcas registradas", "Recomendaciones"];
   useEffect(() => {
+    // Obtener el estado que ya ingreso a la pagina desde aqui
+    if (obtenerEstadoPaginaInicio()==false ) {
+      navigate("/");
+    }
+    // navigate("/");
     obtenerNumnerosCalzadosPorMarcas().then((data) => {
       if (Array.isArray(data)) {
         setMarcas(data);
@@ -84,14 +97,16 @@ const Inicio = () => {
   };
   return (
     <div>
-      <div style={{ position: "relative", zIndex: 2 }}>
+      <div className="relative z-50">
         <button
           data-drawer-target="separator-sidebar"
           data-drawer-toggle="separator-sidebar"
           aria-controls="separator-sidebar"
           type="button"
           onClick={toggleSidebar} /*  */
-          className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg  lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 -600"
+          className={`${
+            sidebarAbierto ? "hidden" : ""
+          } fixed z-50 top-5 items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg  lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 -600`}
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -112,12 +127,17 @@ const Inicio = () => {
           ref={contenedorRef}
           // className="fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0"
           className={`fixed top-0 left-0 z-40 w-80 h-screen transition-transform ${
-            sidebarAbierto ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0`}
+            sidebarAbierto ? " translate-x-0 " : " -translate-x-full "
+          }  lg:translate-x-0`}
           aria-label="Sidebar"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm select-none shadow-2xl">
-            <p className="flex items-center ps-2 mb-5" onClick={()=>{setPaginaSeleccionada("")}}>
+          <div className="h-full px-3 py-4 overflow-y-auto backdrop-blur-sm bg-blue-700/40 select-none shadow-2xl">
+            <p
+              className="flex items-center ps-2 mb-5"
+              onClick={() => {
+                setPaginaSeleccionada("");
+              }}
+            >
               <PiSneakerMoveLight className="w-20 h-20 text-black dark:text-white" />
               <span className="self-center text-2xl font-extrabold whitespace-nowrap dark:text-white">
                 UTAMMENDER
@@ -146,7 +166,10 @@ const Inicio = () => {
                 </a>
               </li>
               <li>
-                <details className="group [&_summary::-webkit-details-marker]:hidden"  onClick={toggleDetails}>
+                <details
+                  className="group [&_summary::-webkit-details-marker]:hidden"
+                  onClick={toggleDetails}
+                >
                   <summary
                     className="flex cursor-pointer items-center w-full p-2 text-base text-blue-900 transition duration-75 rounded-lg group hover:bg-blue-100 dark:text-white dark:hover:bg-blue-700"
                     aria-controls="dropdown-example"
@@ -202,8 +225,6 @@ const Inicio = () => {
         {/* Contenido del sidebar */}
         <div key={renderKey} className="p-4 lg:ml-80">
           <MensajeScrapy />
-          {/* <Dashboard marca={marcaSeleccionada}></Dashboard> */}
-          {/* <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"> */}
           {paginaSeleccionada !== "" ? (
             listaPaginas.indexOf(paginaSeleccionada) === 0 ? (
               <>
@@ -249,22 +270,22 @@ const Inicio = () => {
                 <div className="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
                   <div className="mx-auto max-w-6xl text-center">
                     <h2 className="max-w-5xl text-2xl font-bold leading-none tracking-tighter text-black md:text-5xl lg:text-6xl lg:max-w-7xl">
-                      !Bienvenido a la aplicación de recomendación de calzado
-                      deportivo UTAMMENDER!
+                      !Sistema de recomendación para calzado deportivo
+                      UTAMMENDER!
                     </h2>
 
                     <p className="mt-4 text-gray-500 sm:text-xl">
                       Una plataforma innovadora diseñada para ofrecer una
-                      experiencia única a los usuarios en su búsqueda del par
-                      ideal. Esta aplicación extrae información diariamente de
-                      diversas marcas de calzado deportivo y, basándose en las
-                      preferencias del usuario, proporciona recomendaciones
-                      personalizadas. Al elegir los calzados que más le gusten,
-                      la aplicación utiliza datos actualizados para ofrecer
-                      sugerencias adaptadas a su estilo y necesidades. Descubre
-                      la combinación perfecta de comodidad y estilo con solo
-                      unos clics gracias a esta herramienta intuitiva y
-                      eficiente!
+                      experiencia única a los usuarios en su búsqueda del
+                      calzado deportivo ideal. Esta aplicación extrae
+                      información diariamente de diversas marcas de calzado
+                      deportivo y, basándose en las preferencias del usuario,
+                      proporciona recomendaciones personalizadas. Al elegir los
+                      calzados que más le gusten, la aplicación utiliza datos
+                      actualizados para ofrecer sugerencias adaptadas a su
+                      estilo y necesidades. Descubre la combinación perfecta de
+                      comodidad y estilo con solo unos clics gracias a esta
+                      herramienta intuitiva y eficiente!
                     </p>
                   </div>
                 </div>
@@ -280,14 +301,22 @@ const Inicio = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mx-auto">
-                      <div className="grid grid-cols-3 gap-4 mx-auto sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                    <div className="">
+                      <div className="grid grid-cols-3 gap-4  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 items-center">
                         {listaIconos.map((data) => (
                           <div
-                            className="h-auto text-2xl sm:text-2xl md:text-4xl lg:text-8xl text-neutral-600 text-center mx-auto"
+                            className="w-26 text-8xl md:w-36 md:text-9xl text-neutral-600 text-center hover:text-black cursor-pointer"
                             key={data.marca}
+                            onClick={() => {
+                              // console.log("Valor de marca:", marca);
+                              data.marca && handle_actualizarMarca(data.marca);
+                              handle_paginaSeleccionada("Marcas registradas");
+                            }}
                           >
-                            {data.links}
+                            {data.links != "" && data.links
+                              ? data.links
+                              : data.marca}
+                            {/* <svg  className="w-auto h-auto"><path d="M4 17.004a.5.5 0 0 1-.466-.319l-3.5-9a.5.5 0 1 1 .932-.362L4 15.125l3.034-7.802a.5.5 0 0 1 .466-.319h16a.5.5 0 0 1 0 1H7.842l-3.376 8.681a.5.5 0 0 1-.466.319z"/><path d="M11.5 17.004a.5.5 0 0 1-.474-.342L9.5 12.085l-1.526 4.577a.5.5 0 1 1-.948-.316l2-6c.136-.408.812-.408.948 0l2 6a.5.5 0 0 1-.474.658z"/><path d="M10.693 15.004H8.192a.5.5 0 0 1 0-1h2.501a.5.5 0 0 1 0 1zm6.807 2a.499.499 0 0 1-.416-.223L14 12.156v4.349a.5.5 0 0 1-1 0v-6a.5.5 0 0 1 .916-.278L17 14.853v-4.349a.5.5 0 0 1 1 0v6a.5.5 0 0 1-.5.5zm4.5 0h-1c-1.103 0-2-.897-2-2a.5.5 0 0 1 1 0c0 .551.449 1 1 1h1c.551 0 1-.449 1-1s-.449-1-1-1h-1c-1.103 0-2-.897-2-2s.897-2 2-2h1c1.103 0 2 .897 2 2a.5.5 0 0 1-1 0c0-.551-.449-1-1-1h-1c-.551 0-1 .449-1 1s.449 1 1 1h1c1.103 0 2 .897 2 2s-.897 2-2 2z"/></svg> */}
                           </div>
                         ))}
                       </div>

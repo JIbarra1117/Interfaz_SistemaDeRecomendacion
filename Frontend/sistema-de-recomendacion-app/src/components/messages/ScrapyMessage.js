@@ -4,7 +4,7 @@ import io from "socket.io-client";
 const MensajeScrapy = () => {
   // const [ultimoProceso, setUltimoProceso] = useState(null);
   const [mensajeScrapy, setMensajeScrapy] = useState(null);
-  const [mostrarMensaje, setMostrarMensaje] = useState(false);
+  const [mostrarMensaje, setMostrarMensaje] = useState(false); // es false desde el inicio tambin este set esta comentado en el socket y en el settime importante cambiar despues
 
   useEffect(() => {
     const socket = io("http://localhost:3031?Key-Cliente=React", {
@@ -21,8 +21,8 @@ const MensajeScrapy = () => {
 
       // Ocultar el mensaje después de 5000 milisegundos (5 segundos)
       setTimeout(() => {
-        setMostrarMensaje(false);
-        setMensajeScrapy(null);
+        // setMostrarMensaje(false);
+        // setMensajeScrapy(null);
       }, 5000);
     });
 
@@ -33,28 +33,42 @@ const MensajeScrapy = () => {
     };
   }, []);
 
+  const handleCerrarAviso=()=>{
+    setMostrarMensaje(false)
+  };
+
   return (
     <div>
       {mostrarMensaje ? (
-        <div className="h-20">
+        <div className="h-12">
           {mostrarMensaje ? (
-            <>
+            <div>
               <div
                 id="sticky-banner"
                 tabIndex="-1"
-                className={`fixed z-50 flex justify-between w-full h-15 p-4 border-b rounded-xl border-gray-200 bg-blue-700${
+                className={`fixed top-0 z-50 flex justify-between h-15 p-4 border-b rounded-xl backdrop-blur-lg ${
                   mostrarMensaje
                     ? " animate-flip-down animate-ease-in-out animate-normal"
                     : " animate-flip-down animate-ease-in-out animate-reverse"
+                } ${
+                  mensajeScrapy
+                    ? mensajeScrapy.estado === "iniciado"
+                      ? " bg-gray-600 "
+                      : mensajeScrapy.estado === "completado"
+                      ? " bg-gray-600 "
+                      : mensajeScrapy.estado === "extrayendo"
+                      ? " bg-gray-600 "
+                      : " "
+                    : " "
                 }`}
-            >
+              >
                 <div className="flex items-center mx-auto">
                   <span>HEY!!</span>
                   <span className="w-2"> </span>
-                  <p className="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400">
-                    <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full dark:bg-gray-600 w-6 h-6 items-center justify-center flex-shrink-0">
+                  <p className="flex items-center text-sm font-normal text-gray-50">
+                    <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full   w-6 h-6 items-center justify-center flex-shrink-0">
                       <svg
-                        className="w-3 h-3 text-gray-500 dark:text-gray-400"
+                        className="w-3 h-3 text-black "
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
@@ -80,9 +94,10 @@ const MensajeScrapy = () => {
                 </div>
                 <div className="flex items-center">
                   <button
+                    onClick={handleCerrarAviso}
                     data-dismiss-target="#sticky-banner"
                     type="button"
-                    className="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1"
                   >
                     <svg
                       className="w-3 h-3"
@@ -103,12 +118,12 @@ const MensajeScrapy = () => {
                   </button>
                 </div>
               </div>
-            </>
+            </div>
           ) : (
             <div
               id="sticky-banner"
               tabIndex="-1"
-              className={`fixed z-50 flex justify-between w-full h-15 p-4 border-b rounded-xl border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600${
+              className={`fixed z-50 flex justify-between w-full h-15 p-4 border-b rounded-xl  bg-gray-50 ${
                 mostrarMensaje
                   ? " animate-flip-down animate-ease-in-out animate-normal"
                   : " animate-flip-down animate-ease-in-out animate-reverse"
@@ -117,10 +132,10 @@ const MensajeScrapy = () => {
               <div className="flex items-center mx-auto">
                 <span>HEY!!</span>
                 <span className="w-2"> </span>
-                <p className="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400">
-                  <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full dark:bg-gray-600 w-6 h-6 items-center justify-center flex-shrink-0">
+                <p className="flex items-center text-sm font-normal text-gray-50">
+                  <span className="inline-flex p-1 me-3 bg-gray-200 rounded-full w-6 h-6 items-center justify-center flex-shrink-0">
                     <svg
-                      className="w-3 h-3 text-gray-500 dark:text-gray-400"
+                      className="w-3 h-3 text-gray-50"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
@@ -130,16 +145,14 @@ const MensajeScrapy = () => {
                     </svg>
                     <span className="sr-only">Light bulb</span>
                   </span>
-                  <span>
-                    Prueba de mensaje scrapy
-                  </span>
+                  <span>Prueba de mensaje scrapy</span>
                 </p>
               </div>
               <div className="flex items-center">
                 <button
                   data-dismiss-target="#sticky-banner"
                   type="button"
-                  className="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
+                  className={`flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5`}
                 >
                   <svg
                     className="w-3 h-3"

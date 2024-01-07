@@ -71,7 +71,7 @@ const ActiveSlider = ({ productos, titulo }) => {
             <Slider {...settings} className="animate-fade animate-ease-in-out">
               {productos ? (
                 productos.map((item) => (
-                  <ProductCard producto={item} estado={obtenerSiProductoEsMarcado(item._id)} ></ProductCard>
+                  <ProductCard producto={item} estado={obtenerSiProductoEsMarcado(item._id)} key={item.id}></ProductCard>
                 ))
               ) : (
                 <>

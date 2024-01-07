@@ -30,7 +30,6 @@ const ContenidoRecomendaciones = () => {
             <>
               <details
                 className="group [&_summary::-webkit-details-marker]:hidden bg-blue-700/10"
-                open
               >
                 <summary
                   key={marcaAgrupada.marca}
